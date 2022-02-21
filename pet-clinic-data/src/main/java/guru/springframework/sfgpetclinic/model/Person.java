@@ -3,7 +3,7 @@ package guru.springframework.sfgpetclinic.model;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Person {
+public class Person extends BaseEntity {
 
     private String firstName;
     private String lastName;
