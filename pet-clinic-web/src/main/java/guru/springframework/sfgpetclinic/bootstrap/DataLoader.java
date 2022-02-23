@@ -12,13 +12,15 @@ import org.springframework.stereotype.Component;
 // initialize data
 @Component // spring bean it gets registered in the spring context
 public class DataLoader implements CommandLineRunner {
+
+
     // implement the 2 services
     private final OwnerService ownerService;
     private final VetService vetService;
-    // constructor
-    public DataLoader() {
-        ownerService = new OwnerServiceMap();
-        vetService = new VetServiceMap();
+    //@Autowired, just dont need because is constructor
+    public DataLoader(OwnerService ownerService, VetService vetService) {
+        this.ownerService = ownerService;
+        this.vetService = vetService;
     }
 
     @Override
