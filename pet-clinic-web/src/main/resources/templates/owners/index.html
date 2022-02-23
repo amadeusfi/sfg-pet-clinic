@@ -17,7 +17,6 @@
     </tr>
     </thead>
     <tbody>
-    <!--/*@thymesVar id="owners" type="guru.springframework.sfgpetclinic.model.Owner"*/-->
     <tr th:each="owner : ${owners}">
         <td th:text="${owner.id}">1</td>
         <td th:text="${owner.firstName}">Joe</td>
