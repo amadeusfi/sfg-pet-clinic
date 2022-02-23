@@ -1,0 +1,58 @@
+package guru.springframework.sfgpetclinic.bootstrap;
+
+import guru.springframework.sfgpetclinic.model.Owner;
+import guru.springframework.sfgpetclinic.model.Vet;
+import guru.springframework.sfgpetclinic.services.OwnerService;
+import guru.springframework.sfgpetclinic.services.VetService;
+import guru.springframework.sfgpetclinic.services.map.OwnerServiceMap;
+import guru.springframework.sfgpetclinic.services.map.VetServiceMap;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+// initialize data
+@Component // spring bean it gets registered in the spring context
+public class DataLoader implements CommandLineRunner {
+    // implement the 2 services
+    private final OwnerService ownerService;
+    private final VetService vetService;
+    // constructor
+    public DataLoader() {
+        ownerService = new OwnerServiceMap();
+        vetService = new VetServiceMap();
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        Owner owner1 = new Owner();
+        owner1.setId(1L);
+        owner1.setFirstName("El chavo");
+        owner1.setLastName("Del8");
+
+        ownerService.save(owner1);
+        Owner owner2 = new Owner();
+        owner2.setId(2L);
+        owner2.setFirstName("La Chava");
+        owner2.setLastName("Del9");
+
+        ownerService.save(owner2);
+        System.out.println("Loaded  owners " + owner1);
+
+        Vet vet1 = new Vet();
+        vet1.setId(1L);
+        vet1.setFirstName("Vet1");
+        vet1.setLastName("Dogueira");
+
+        vetService.save(vet1);
+
+        Vet vet2 = new Vet();
+        vet1.setId(2L);
+        vet1.setFirstName("Vet2");
+        vet1.setLastName("Gateira");
+
+        vetService.save(vet2);
+
+        System.out.println("Loaded vets " + vetService.findAll() );
+
+
+    }
+}
