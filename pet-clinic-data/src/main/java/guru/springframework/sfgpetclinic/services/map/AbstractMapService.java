@@ -1,13 +1,15 @@
 package guru.springframework.sfgpetclinic.services.map;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import guru.springframework.sfgpetclinic.model.BaseEntity;
 
-public abstract class AbstractMapService<T,ID> {
+import java.util.*;
+
+// we want to allow the persistence layer - in this case the hash map, we are going to provide an ID setting strategy through an implementation
+// yes we can extend the generics, our entity type now muss extend BaseEntity
+public abstract class AbstractMapService<T extends BaseEntity,ID extends Long> {
     // this map get the generics id and type
-    protected Map<ID,T> map = new HashMap<>();
+    // here is saying that the key in the map is going to be long and then whatever that T generic is going to be
+    protected Map<Long,T> map = new HashMap<>();
 
     Set<T> findAll() {
         return new HashSet<>(map.values());
@@ -18,8 +20,16 @@ public abstract class AbstractMapService<T,ID> {
         return map.get(id);
     }
 
-    T save(ID id, T object){
-        map.put(id, object);
+    T save(T object){
+        // object is going to be an implementation of the BaseEntity so the getId() method is going to be available
+        if(object != null) {
+            if(object.getId() == null) {
+                object.setId(getNextId());
+            }
+            map.put(object.getId(), object);
+        } else {
+            throw new RuntimeException("Object cannot be null");
+        }
         return object;
     }
 
@@ -29,5 +39,16 @@ public abstract class AbstractMapService<T,ID> {
 
     void delete(T object) {
         map.entrySet().removeIf(entry -> entry.getValue().equals(object));
+    }
+
+    private Long getNextId() {
+
+        Long nextId = null;
+        try {
+            nextId = Collections.max(map.keySet()) +1;
+        } catch (NoSuchElementException e) {
+            nextId = 1L;
+        }
+        return nextId;
     }
 }
